@@ -76,7 +76,7 @@ async function delay(ms) {
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
   // render starting UI
-  renderAt("#race", renderRaceStartView());
+  
 
   // TODO - Get player_id and track_id from the store
   const player_id = store.player_id;
@@ -84,7 +84,9 @@ async function handleCreateRace() {
   // const race = TODO - invoke the API call to create the race, then save the result
   const race = await createRace(player_id, track_id);
   // TODO - update the store with the race id
-  store.race_id = +race.ID;
+  store.race_id = +race.ID-1;
+  console.log('race',race)
+  renderAt("#race", renderRaceStartView(race.Track));
   // The race has been created, now start the countdown
   // TODO - call the async function runCountdown
   await runCountdown();
@@ -103,7 +105,7 @@ function runRace(raceID) {
         console.log("getRace error ", error)
       );
       if (res.status == "in-progress")
-        renderAt("#leaderBoard", raceProgress(data.positions));
+        renderAt("#leaderBoard", raceProgress(res.positions));
       if (res.status == "finished") {
         clearInterval(raceInterval); // to stop the interval from repeating
         renderAt("#race", resultsView(res.positions));
@@ -123,12 +125,14 @@ async function runCountdown() {
     return new Promise((resolve) => {
       // TODO - use Javascript's built in setInterval method to count down once per second
       const interval = setInterval(() => {
-        while (timer > 0) {
+        if (timer !== 0) {
           document.getElementById("big-numbers").innerHTML = --timer;
         }
-        // TODO - if the countdown is done, clear the interval, resolve the promise, and return
+       else{
         clearInterval(interval);
         resolve();
+       } // TODO - if the countdown is done, clear the interval, resolve the promise, and return
+       
       }, 1000);
       // TODO - if the countdown is done, clear the interval, resolve the promise, and return
     });
@@ -277,12 +281,10 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-  let userPlayer = positions.find((e) => e.id === store.player_id);
-  userPlayer.driver_name += " (you)";
 
   positions = positions.sort((a, b) => (a.segment > b.segment ? -1 : 1));
   let count = 1;
-
+ 
   const results = positions.map((p) => {
     return `
 			<tr>
