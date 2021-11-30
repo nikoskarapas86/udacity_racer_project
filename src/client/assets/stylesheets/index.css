@@ -91,10 +91,12 @@ section {
 }
 
 footer {
-  height: 200px;
-  background-color: black;
+  height: 100px;
+  background-color: rgb(172, 139, 139);
 }
-
+.itsYou{
+  color:blue;
+}
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
   header {

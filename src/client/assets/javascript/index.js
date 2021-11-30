@@ -286,20 +286,24 @@ function raceProgress(positions) {
   let count = 1;
  
   const results = positions.map((p) => {
-    return `
+    return p.id == store.player_id? `
 			<tr>
+				<td>
+					<h3 class="itsYou">${count++} - ${p.driver_name}</h3>
+				</td>
+			</tr>
+		`:	`<tr>
 				<td>
 					<h3>${count++} - ${p.driver_name}</h3>
 				</td>
-			</tr>
-		`;
+			</tr>`;
   });
 
   return `
 		<main>
 			<h3>Leaderboard</h3>
 			<section id="leaderBoard">
-				${results}
+				${results.join('')}
 			</section>
 		</main>
 	`;
