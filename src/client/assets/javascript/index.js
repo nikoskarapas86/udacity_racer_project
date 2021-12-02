@@ -281,10 +281,8 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-
   positions = positions.sort((a, b) => (a.segment > b.segment ? -1 : 1));
   let count = 1;
- 
   const results = positions.map((p) => {
     return p.id == store.player_id? `
 			<tr>
